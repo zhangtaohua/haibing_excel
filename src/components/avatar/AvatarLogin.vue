@@ -19,7 +19,7 @@
               <!-- <img class="login_logo_show" src="@/assets/images/header/logo2.svg" /> -->
             </div>
 
-            <h1 class="row_nw_center_center login_title">测试EXCEL</h1>
+            <h1 class="row_nw_center_center login_title">缤果云中心</h1>
             <h2 class="row_nw_center_center login_en_title"> HB Data Center System </h2>
           </div>
 
@@ -280,7 +280,7 @@ watch(
 
 function checkPhoneHandle() {
   if (loginParas.phone.length == 11) {
-    const phoneRegex = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+    const phoneRegex = /^(0|86|17951)?(13[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|14[0-9]|19[0-9])[0-9]{8}$/;
     if (phoneRegex.test(loginParas.phone)) {
       loginParas.isPhoneError = false;
     } else {

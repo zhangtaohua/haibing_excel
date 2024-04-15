@@ -3,7 +3,7 @@
     <div class="row_nw_fs_center header_left_box">
       <div class="row_nw_center_certer header_logo_box">
         <!-- <img class="wh_100p_100p" src="@/assets/images/header/logo.svg" /> -->
-        <div class="row_nw_fs_center header_logo_title">测试EXCEL</div>
+        <div class="row_nw_fs_center header_logo_title">缤果云中心</div>
       </div>
     </div>
 

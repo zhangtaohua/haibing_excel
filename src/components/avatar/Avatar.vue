@@ -12,7 +12,7 @@
       @mouseenter="clearHiddenTimerHandle"
       @mouseleave="showInfoHandle(false)"
     >
-      <div class="row_nw_center_center user_info_name">{{ userInfo.name }}</div>
+      <div class="row_nw_center_center user_info_name">{{ userInfo.nick_name }}</div>
       <div class="row_nw_center_center user_info_lgap"></div>
       <div class="row_nw_center_center user_info_id">
         <span class="row_nw_fs_center user_info_idlabel">账号ID:&nbsp;</span>

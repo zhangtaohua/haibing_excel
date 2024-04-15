@@ -28,6 +28,7 @@ export const useAuthUserStore = defineStore("authUserStore", () => {
 
   function setAuthUser(user: any) {
     authUserStore.user = user;
+    storage.set("user", user);
   }
 
   function setRegisterUser(isReg: boolean) {

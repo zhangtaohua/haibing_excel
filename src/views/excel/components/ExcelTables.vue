@@ -1,5 +1,6 @@
 <template>
   <div class="col_nw_fs_fs extable_container">
+    <div class="extable_mask"></div>
     <el-table
       :data="tableData.data"
       style="width: 100%"
@@ -21,12 +22,7 @@
               @mouseenter="cellEnterHandle('A', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `A${scope.row.id}`"
-                v-model="scope.row.A"
-                @change="changeDataHandle('A', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.A }}</span>
+              <el-input v-model="scope.row.A" class="extable_input" @change="changeDataHandle('A', scope.row)" />
             </div>
           </template>
         </el-table-column>
@@ -40,12 +36,7 @@
               @mouseenter="cellEnterHandle('B', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `B${scope.row.id}`"
-                v-model="scope.row.B"
-                @change="changeDataHandle('B', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.B }}</span>
+              <el-input v-model="scope.row.B" class="extable_input" @change="changeDataHandle('B', scope.row)" />
             </div>
           </template>
         </el-table-column>
@@ -59,12 +50,7 @@
               @mouseenter="cellEnterHandle('C', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `C${scope.row.id}`"
-                v-model="scope.row.C"
-                @change="changeDataHandle('C', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.C }}</span>
+              <el-input v-model="scope.row.C" class="extable_input" @change="changeDataHandle('C', scope.row)" />
             </div>
           </template>
         </el-table-column>
@@ -78,12 +64,7 @@
               @mouseenter="cellEnterHandle('D', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `D${scope.row.id}`"
-                v-model="scope.row.D"
-                @change="changeDataHandle('D', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.D }}</span>
+              <el-input v-model="scope.row.D" class="extable_input" @change="changeDataHandle('D', scope.row)" />
             </div>
           </template>
         </el-table-column>
@@ -93,35 +74,87 @@
         <el-table-column
           prop="E"
           label="采购员"
-          width="100"
+          width="160"
           :filters="tableData.users"
           :filter-method="tableFilterUsersHandle"
         >
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('E', scope.row, true)">
+            <div
+              class="extable_cell"
+              @mouseenter="cellEnterHandle('E', scope.row)"
+              @mouseleave="cellEnterHandle('NOUSE', scope.row)"
+            >
               <el-select
-                v-if="tableData.EDIT == `E${scope.row.id}`"
+                v-if="scope.row.id != 'SUM'"
                 v-model="scope.row.E"
                 :clearable="true"
                 placeholder="请选择"
                 style="width: 100%"
                 @change="changeDataHandle('E', scope.row)"
-                @visible-change="clearTimerHandle"
               >
-                <el-option v-for="item in tableData.users" :key="item.id" :label="item.nick_name" :value="item.id" />
+                <el-option v-for="item in tableData.users" :key="item.id" :label="item.nick_name" :value="item.value" />
               </el-select>
-              <span v-else class="wh_100p_100p">{{ userMapTables[scope.row.E] }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
       <el-table-column label="F">
-        <el-table-column prop="F" label="入库时间" width="170" sortable>
+        <el-table-column prop="Y" label="入库员" width="160">
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('F', scope.row, true)">
+            <div
+              class="extable_cell"
+              @mouseenter="cellEnterHandle('Y', scope.row)"
+              @mouseleave="cellEnterHandle('NOUSE', scope.row)"
+            >
+              <el-select
+                v-if="scope.row.id != 'SUM'"
+                v-model="scope.row.Y"
+                :clearable="true"
+                placeholder="请选择"
+                style="width: 100%"
+                @change="changeDataHandle('Y', scope.row)"
+              >
+                <el-option v-for="item in tableData.users" :key="item.id" :label="item.nick_name" :value="item.value" />
+              </el-select>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column label="G">
+        <el-table-column prop="Z" label="运营员" width="160">
+          <template #default="scope">
+            <div
+              class="extable_cell"
+              @mouseenter="cellEnterHandle('Z', scope.row)"
+              @mouseleave="cellEnterHandle('NOUSE', scope.row)"
+            >
+              <el-select
+                v-if="scope.row.id != 'SUM'"
+                v-model="scope.row.Z"
+                :clearable="true"
+                placeholder="请选择"
+                style="width: 100%"
+                @change="changeDataHandle('Z', scope.row)"
+              >
+                <el-option v-for="item in tableData.users" :key="item.id" :label="item.nick_name" :value="item.value" />
+              </el-select>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column label="H">
+        <el-table-column prop="F" label="入库时间" width="260" sortable>
+          <template #default="scope">
+            <div
+              class="extable_cell"
+              @mouseenter="cellEnterHandle('F', scope.row)"
+              @mouseleave="cellEnterHandle('NOUSE', scope.row)"
+            >
               <el-date-picker
-                v-if="tableData.EDIT == `F${scope.row.id}`"
+                v-if="scope.row.id != 'SUM'"
                 v-model="scope.row.F"
                 type="datetime"
                 style="width: 100%"
@@ -130,15 +163,13 @@
                 :disabledDate="disabledDateHandle"
                 value-format="YYYY-MM-DD hh:mm:ss"
                 @change="changeDataHandle('F', scope.row)"
-                @visible-change="clearTimerHandle"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.F }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="G">
+      <el-table-column v-if="currentUser < 4" label="I">
         <el-table-column prop="G" label="入库单价(¥)" width="180">
           <template #default="scope">
             <div
@@ -146,22 +177,44 @@
               @mouseenter="cellEnterHandle('G', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `G${scope.row.id}`"
+              <el-input
+                v-if="scope.row.id != 'SUM'"
                 v-model="scope.row.G"
-                :precision="2"
-                :step="0.01"
+                type="number"
                 :min="0"
-                step-strictly
-                @change="changeDataHandle('G', scope.row)"
+                :step="0.01"
+                class="extable_input"
+                @change="changeNumberHandle('G', scope.row)"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.G }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="H">
+      <el-table-column label="J">
+        <el-table-column prop="AB" label="参考价(¥)" width="180">
+          <template #default="scope">
+            <div
+              class="extable_cell"
+              @mouseenter="cellEnterHandle('AB', scope.row)"
+              @mouseleave="cellEnterHandle('NOUSE', scope.row)"
+            >
+              <el-input
+                v-if="scope.row.id != 'SUM' && currentUser < 4"
+                type="number"
+                v-model="scope.row.AB"
+                class="extable_input"
+                :step="0.01"
+                :min="0"
+                @change="changeNumberHandle('AB', scope.row)"
+              />
+              <span v-else class="wh_100p_100p">{{ scope.row.AB }}</span>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column label="K">
         <el-table-column prop="H" label="刷机费(¥)" width="180">
           <template #default="scope">
             <div
@@ -169,22 +222,20 @@
               @mouseenter="cellEnterHandle('H', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `H${scope.row.id}`"
+              <el-input
                 v-model="scope.row.H"
-                :precision="2"
+                type="number"
                 :step="0.01"
                 :min="0"
-                step-strictly
-                @change="changeDataHandle('H', scope.row)"
+                class="extable_input"
+                @change="changeNumberHandle('H', scope.row)"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.H }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="I">
+      <el-table-column v-if="currentUser < 4" label="L">
         <el-table-column prop="I" label="耗材费(¥)" width="180">
           <template #default="scope">
             <div
@@ -192,22 +243,20 @@
               @mouseenter="cellEnterHandle('I', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `I${scope.row.id}`"
+              <el-input
                 v-model="scope.row.I"
-                :precision="2"
+                type="number"
                 :step="0.01"
                 :min="0"
-                step-strictly
-                @change="changeDataHandle('I', scope.row)"
+                class="extable_input"
+                @change="changeNumberHandle('I', scope.row)"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.I }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="J">
+      <el-table-column v-if="currentUser < 4" label="M">
         <el-table-column prop="J" label="附加费(¥)" width="180">
           <template #default="scope">
             <div
@@ -215,22 +264,20 @@
               @mouseenter="cellEnterHandle('J', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `J${scope.row.id}`"
+              <el-input
                 v-model="scope.row.J"
-                :precision="2"
+                type="number"
                 :step="0.01"
                 :min="0"
-                step-strictly
-                @change="changeDataHandle('J', scope.row)"
+                class="extable_input"
+                @change="changeNumberHandle('J', scope.row)"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.J }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="K">
+      <el-table-column v-if="currentUser < 4" label="N">
         <el-table-column prop="K" label="物流费(¥)" width="180">
           <template #default="scope">
             <div
@@ -238,22 +285,20 @@
               @mouseenter="cellEnterHandle('K', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `K${scope.row.id}`"
+              <el-input
                 v-model="scope.row.K"
-                :precision="2"
+                type="number"
                 :step="0.01"
                 :min="0"
-                step-strictly
-                @change="changeDataHandle('K', scope.row)"
+                class="extable_input"
+                @change="changeNumberHandle('K', scope.row)"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.K }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="L">
+      <el-table-column label="O">
         <el-table-column prop="L" label="销售数量" width="180">
           <template #default="scope">
             <div
@@ -261,32 +306,30 @@
               @mouseenter="cellEnterHandle('L', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `L${scope.row.id}`"
+              <el-input
                 v-model="scope.row.L"
-                :precision="2"
+                type="number"
+                class="extable_input"
+                :min="1"
                 :step="1"
-                :min="0"
-                step-strictly
-                @change="changeDataHandle('L', scope.row)"
+                @change="changeNumberHandle('L', scope.row)"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.L }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="M">
+      <el-table-column v-if="currentUser < 4" label="P">
         <el-table-column prop="M" label="总成本(¥)" width="180">
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('NOUSE', scope.row)">
+            <div class="extable_cell">
               <span class="wh_100p_100p">{{ scope.row.M }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="N">
+      <el-table-column label="Q">
         <el-table-column prop="N" label="销售币种" width="120">
           <template #default="scope">
             <div
@@ -295,7 +338,7 @@
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
               <el-select
-                v-if="tableData.EDIT == `N${scope.row.id}`"
+                v-if="scope.row.id != 'SUM'"
                 v-model="scope.row.N"
                 :clearable="true"
                 placeholder="请选择币种"
@@ -304,13 +347,12 @@
               >
                 <el-option v-for="item in currencies" :key="item.code" :label="item.name" :value="item.code" />
               </el-select>
-              <span v-else class="wh_100p_100p">{{ scope.row.N }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="O">
+      <el-table-column label="R">
         <el-table-column prop="O" label="汇率(¥)" width="180">
           <template #default="scope">
             <div
@@ -318,14 +360,14 @@
               @mouseenter="cellEnterHandle('O', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `O${scope.row.id}` && currentUser < 4"
+              <el-input
+                v-if="scope.row.id != 'SUM' && currentUser < 4"
                 v-model="scope.row.O"
-                :precision="2"
+                type="number"
                 :step="0.01"
                 :min="0"
-                step-strictly
-                @change="changeDataHandle('O', scope.row)"
+                class="extable_input"
+                @change="changeNumberHandle('O', scope.row)"
               />
               <span v-else class="wh_100p_100p">{{ scope.row.O }}</span>
             </div>
@@ -333,7 +375,7 @@
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="P">
+      <el-table-column label="S">
         <el-table-column prop="P" label="销售单价" width="180">
           <template #default="scope">
             <div
@@ -341,52 +383,51 @@
               @mouseenter="cellEnterHandle('P', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input-number
-                v-if="tableData.EDIT == `P${scope.row.id}`"
+              <el-input
+                v-if="scope.row.id != 'SUM' && currentUser < 4"
                 v-model="scope.row.P"
-                :precision="2"
+                type="number"
                 :step="0.01"
                 :min="0"
-                step-strictly
-                @change="changeDataHandle('P', scope.row)"
+                class="extable_input"
+                @change="changeNumberHandle('P', scope.row)"
               />
-              <span v-else class="wh_100p_100p">{{ scope.row.P }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="Q">
+      <el-table-column v-if="currentUser < 4" label="T">
         <el-table-column prop="Q" label="销售单价(¥)" width="180">
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('NOUSE', scope.row)">
+            <div class="extable_cell" v-if="scope.row.id != 'SUM'">
               <span class="wh_100p_100p">{{ scope.row.Q }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="R">
+      <el-table-column v-if="currentUser < 4" label="U">
         <el-table-column prop="R" label="销售总价(¥)" width="180">
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('NOUSE', scope.row)">
+            <div class="extable_cell">
               <span class="wh_100p_100p">{{ scope.row.R }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="S">
+      <el-table-column label="V" v-if="currentUser < 4">
         <el-table-column prop="S" label="利润(¥)" width="180">
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('NOUSE', scope.row)">
+            <div class="extable_cell">
               <span class="wh_100p_100p">{{ scope.row.S }}</span>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="T">
+      <el-table-column label="W">
         <el-table-column prop="T" label="销售平台" width="160">
           <template #default="scope">
             <div
@@ -394,18 +435,21 @@
               @mouseenter="cellEnterHandle('T', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `T${scope.row.id}`"
+              <el-select
                 v-model="scope.row.T"
+                :clearable="true"
+                placeholder="请选择平台"
+                style="width: 100%"
                 @change="changeDataHandle('T', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.T }}</span>
+              >
+                <el-option v-for="item in platformType" :key="item.code" :label="item.name" :value="item.name" />
+              </el-select>
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="U">
+      <el-table-column label="X">
         <el-table-column prop="U" label="店铺名称" width="260">
           <template #default="scope">
             <div
@@ -413,18 +457,13 @@
               @mouseenter="cellEnterHandle('U', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `U${scope.row.id}`"
-                v-model="scope.row.U"
-                @change="changeDataHandle('U', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.U }}</span>
+              <el-input v-model="scope.row.U" class="extable_input" @change="changeDataHandle('U', scope.row)" />
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="V">
+      <el-table-column label="Y">
         <el-table-column prop="V" label="销售平台订单号" width="280">
           <template #default="scope">
             <div
@@ -432,18 +471,13 @@
               @mouseenter="cellEnterHandle('V', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `V${scope.row.id}`"
-                v-model="scope.row.V"
-                @change="changeDataHandle('V', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.V }}</span>
+              <el-input v-model="scope.row.V" class="extable_input" @change="changeDataHandle('V', scope.row)" />
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="W">
+      <el-table-column label="Z">
         <el-table-column prop="W" label="物流平台" width="160">
           <template #default="scope">
             <div
@@ -451,18 +485,13 @@
               @mouseenter="cellEnterHandle('W', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `W${scope.row.id}`"
-                v-model="scope.row.W"
-                @change="changeDataHandle('W', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.W }}</span>
+              <el-input v-model="scope.row.W" class="extable_input" @change="changeDataHandle('W', scope.row)" />
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="X">
+      <el-table-column label="AA">
         <el-table-column prop="X" label="物流单号" width="280">
           <template #default="scope">
             <div
@@ -470,60 +499,13 @@
               @mouseenter="cellEnterHandle('X', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `X${scope.row.id}`"
-                v-model="scope.row.X"
-                @change="changeDataHandle('X', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.X }}</span>
+              <el-input v-model="scope.row.X" class="extable_input" @change="changeDataHandle('X', scope.row)" />
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="Y">
-        <el-table-column prop="Y" label="入库员" width="100">
-          <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('Y', scope.row, true)">
-              <el-select
-                v-if="tableData.EDIT == `Y${scope.row.id}` && currentUser < 4"
-                v-model="scope.row.Y"
-                :clearable="true"
-                placeholder="请选择"
-                style="width: 100%"
-                @change="changeDataHandle('Y', scope.row)"
-                @visible-change="clearTimerHandle"
-              >
-                <el-option v-for="item in tableData.users" :key="item.id" :label="item.nick_name" :value="item.id" />
-              </el-select>
-              <span v-else class="wh_100p_100p">{{ userMapTables[scope.row.Y] }}</span>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-
-      <el-table-column label="Z">
-        <el-table-column prop="Z" label="运营员" width="100">
-          <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('Z', scope.row, true)">
-              <el-select
-                v-if="tableData.EDIT == `Z${scope.row.id}`"
-                v-model="scope.row.Z"
-                :clearable="true"
-                placeholder="请选择"
-                style="width: 100%"
-                @change="changeDataHandle('Z', scope.row)"
-                @visible-change="clearTimerHandle"
-              >
-                <el-option v-for="item in tableData.users" :key="item.id" :label="item.nick_name" :value="item.id" />
-              </el-select>
-              <span v-else class="wh_100p_100p">{{ userMapTables[scope.row.Z] }}</span>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-
-      <el-table-column label="AA">
+      <el-table-column label="AB">
         <el-table-column prop="AA" label="备注" width="260">
           <template #default="scope">
             <div
@@ -531,23 +513,18 @@
               @mouseenter="cellEnterHandle('AA', scope.row)"
               @mouseleave="cellEnterHandle('NOUSE', scope.row)"
             >
-              <el-input
-                v-if="tableData.EDIT == `AA${scope.row.id}`"
-                v-model="scope.row.AA"
-                @change="changeDataHandle('AA', scope.row)"
-              />
-              <span v-else class="wh_100p_100p">{{ scope.row.AA }}</span>
+              <el-input v-model="scope.row.AA" class="extable_input" @change="changeDataHandle('AA', scope.row)" />
             </div>
           </template>
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="AB">
-        <el-table-column prop="created_at" label="创建时间" width="180" sortable>
+      <el-table-column label="AC">
+        <el-table-column prop="created_at" label="创建时间" width="260" sortable>
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('created_at', scope.row, true)">
+            <div class="extable_cell" v-if="scope.row.id != 'SUM' && currentUser < 4">
               <el-date-picker
-                v-if="tableData.EDIT == `created_at${scope.row.id}` && currentUser < 4"
+                v-if="currentUser < 4"
                 v-model="scope.row.created_at"
                 type="datetime"
                 style="width: 100%"
@@ -556,7 +533,6 @@
                 :disabledDate="disabledDateHandle"
                 value-format="YYYY-MM-DD hh:mm:ss"
                 @change="changeDataHandle('created_at', scope.row)"
-                @visible-change="clearTimerHandle"
               />
               <span v-else class="wh_100p_100p">{{ parseDateFormat(scope.row.created_at) }}</span>
             </div>
@@ -564,12 +540,12 @@
         </el-table-column>
       </el-table-column>
 
-      <el-table-column label="AC">
-        <el-table-column prop="updated_at" label="更新时间" width="180" sortable>
+      <el-table-column label="AD">
+        <el-table-column prop="updated_at" label="更新时间" width="260" sortable>
           <template #default="scope">
-            <div class="extable_cell" @mouseenter="cellEnterHandle('updated_at', scope.row, true)">
+            <div class="extable_cell" v-if="scope.row.id != 'SUM' && currentUser < 4">
               <el-date-picker
-                v-if="tableData.EDIT == `updated_at${scope.row.id}` && currentUser < 4"
+                v-if="currentUser < 4"
                 v-model="scope.row.updated_at"
                 type="datetime"
                 style="width: 100%"
@@ -578,7 +554,6 @@
                 :disabledDate="disabledDateHandle"
                 value-format="YYYY-MM-DD hh:mm:ss"
                 @change="changeDataHandle('updated_at', scope.row)"
-                @visible-change="clearTimerHandle"
               />
               <span v-else class="wh_100p_100p">{{ parseDateFormat(scope.row.updated_at) }}</span>
             </div>
@@ -627,7 +602,7 @@
             </template>
           </el-popconfirm>
           <el-popconfirm
-            v-if="scope.row.id == 'SUM'"
+            v-if="scope.row.id == 'SUM' && currentUser < 4"
             width="220"
             :confirm-button-text="'确定'"
             :cancel-button-text="'取消'"
@@ -659,7 +634,8 @@ import { ElMessage } from "element-plus";
 import { nanoid } from "nanoid";
 import { useTimeRangeStore } from "@/store/authTimeRangeStore";
 import { useAuthUserStore } from "@/store/authUserStore";
-import { currencies } from "@/common/data.ts";
+import { currencies, platformType } from "@/common/data.ts";
+import storage from "@/utils/storage/storage";
 
 import {
   getAllExcelRequest,
@@ -679,6 +655,9 @@ const todayTime = dayjs();
 const currentUser = computed(() => {
   if (authUserStore.user && authUserStore.user.id) {
     return parseInt(authUserStore.user.id);
+  } else if (storage.get("user")) {
+    const user = storage.get("user");
+    return parseInt(user.id);
   } else {
     return 9999;
   }
@@ -735,7 +714,7 @@ const currentEdit = {
   row: -1,
 };
 
-const numberColumns = ["G", "H", "I", "J", "K", "L", "O", "P"];
+const numberColumns = ["G", "H", "I", "J", "K", "L", "O", "P", "AB"];
 
 const tableRowClassNameHandle = (row, rowIndex) => {
   if (row.rowIndex == 0) {
@@ -825,7 +804,7 @@ const pastHandle = (event) => {
           creatRowHandle(rowData, table, currentEdit.column, dataTemp);
         } else {
           // 更新数据
-          updataRowHandle(table, rowData.id, currentEdit.column, dataTemp);
+          updataRowHandle(rowData, table, rowData.id, currentEdit.column, dataTemp);
         }
       }
 
@@ -957,7 +936,7 @@ function creatRowHandle(row, table, column, data) {
     });
 }
 
-function updataRowHandle(table, id, column, data) {
+function updataRowHandle(row, table, id, column, data) {
   const reqData = {
     row: "" + id,
     column: "" + column,
@@ -967,6 +946,15 @@ function updataRowHandle(table, id, column, data) {
   updateExcelRequest(table, id, reqData)
     .then((res) => {
       console.log("updateExcelRequest ok", res);
+      nextTick(() => {
+        if (checkIsNeedCalc(column)) {
+          calcAndUpdateTotalCasts(row, true);
+          calcAndUpdateSalesProfit(row, true);
+        }
+        if (column == "N") {
+          calcAndUpdateCurrency(row, true);
+        }
+      });
     })
     .catch((err) => {
       console.log("updateExcelRequest err", err);
@@ -979,21 +967,7 @@ function updataRowHandle(table, id, column, data) {
     });
 }
 
-let enterTimer = null;
-
-function clearTimerHandle(visible = true) {
-  if (enterTimer) {
-    clearTimeout(enterTimer);
-    enterTimer = null;
-  }
-  if (!visible) {
-    enterTimer = setTimeout(() => {
-      cellEnterHandle("NOUSE", null);
-    }, 2000);
-  }
-}
-
-function cellEnterHandle(column, row, isTime = false) {
+function cellEnterHandle(column, row) {
   if (column == "NOUSE") {
     tableData.EDIT = "";
     oldCellData = "";
@@ -1006,13 +980,6 @@ function cellEnterHandle(column, row, isTime = false) {
 
       currentEdit.column = column;
       currentEdit.row = row.ROW;
-
-      if (isTime) {
-        clearTimerHandle();
-        enterTimer = setTimeout(() => {
-          cellEnterHandle("NOUSE", null);
-        }, 2000);
-      }
     }
   }
 }
@@ -1030,15 +997,15 @@ function calcSum() {
     let rdata = 0;
     let sdata = 0;
     for (let i = 1; i < dataLen; i++) {
-      hdata = hdata + tableData.data[i].H;
-      idata = idata + tableData.data[i].I;
-      jdata = jdata + tableData.data[i].J;
-      kdata = kdata + tableData.data[i].K;
+      hdata = hdata + parseFloat(tableData.data[i].H);
+      idata = idata + parseFloat(tableData.data[i].I);
+      jdata = jdata + parseFloat(tableData.data[i].J);
+      kdata = kdata + parseFloat(tableData.data[i].K);
 
-      ldata = ldata + tableData.data[i].L;
-      mdata = mdata + tableData.data[i].M;
-      rdata = rdata + tableData.data[i].R;
-      sdata = sdata + tableData.data[i].S;
+      ldata = ldata + parseInt(tableData.data[i].L);
+      mdata = mdata + parseFloat(tableData.data[i].M);
+      rdata = rdata + parseFloat(tableData.data[i].R);
+      sdata = sdata + parseFloat(tableData.data[i].S);
     }
 
     sumData.H = Math.round(hdata * 100) / 100;
@@ -1054,39 +1021,33 @@ function calcSum() {
 }
 
 function calcAndUpdateTotalCasts(row, isUpdate = false) {
-  if (
-    typeof row.G == "number" &&
-    typeof row.L == "number" &&
-    typeof row.H == "number" &&
-    typeof row.I == "number" &&
-    typeof row.J == "number" &&
-    typeof row.K == "number"
-  ) {
-    const totalCasts = Math.round((row.G * row.L + row.H + row.I + row.J + row.K) * 100) / 100;
-    row.M = totalCasts;
+  const totalCasts =
+    Math.round(
+      (parseFloat(row.G) * parseInt(row.L) +
+        parseFloat(row.H) +
+        parseFloat(row.I) +
+        parseFloat(row.J) +
+        parseFloat(row.K)) *
+        100,
+    ) / 100;
+  row.M = totalCasts;
 
-    if (isUpdate) {
-      const id = row.id;
-      const table = row.table_name ?? currentTableName.value;
-      updataRowHandle(table, id, "M", totalCasts);
-    }
-
-    calcSum();
+  if (isUpdate) {
+    const id = row.id;
+    const table = row.table_name ?? currentTableName.value;
+    updataRowHandle(row, table, id, "M", totalCasts);
   }
+
+  console.log("calcAndUpdateTotalCasts", calcAndUpdateTotalCasts, totalCasts, row.G);
+
+  calcSum();
 }
 
 function calcAndUpdateSalesProfit(row, isUpdate = false) {
-  if (
-    typeof row.P == "number" &&
-    typeof row.O == "number" &&
-    typeof row.L == "number" &&
-    typeof row.M == "number" &&
-    row.P > 0 &&
-    row.O > 0
-  ) {
-    const salesPrice = Math.round(row.O * row.P * 100) / 100;
-    const salesTotal = Math.round(salesPrice * row.L * 100) / 100;
-    const profit = Math.round((salesTotal - row.M) * 100) / 100;
+  if (row.P > 0 && row.O > 0) {
+    const salesPrice = Math.round(parseFloat(row.O) * parseFloat(row.P) * 100) / 100;
+    const salesTotal = Math.round(salesPrice * parseInt(row.L) * 100) / 100;
+    const profit = Math.round((salesTotal - parseFloat(row.M)) * 100) / 100;
 
     row.Q = salesPrice;
     row.R = salesTotal;
@@ -1095,9 +1056,9 @@ function calcAndUpdateSalesProfit(row, isUpdate = false) {
     if (isUpdate) {
       const id = row.id;
       const table = row.table_name ?? currentTableName.value;
-      updataRowHandle(table, id, "Q", salesPrice);
-      updataRowHandle(table, id, "R", salesTotal);
-      updataRowHandle(table, id, "S", profit);
+      updataRowHandle(row, table, id, "Q", salesPrice);
+      updataRowHandle(row, table, id, "R", salesTotal);
+      updataRowHandle(row, table, id, "S", profit);
     }
 
     calcSum();
@@ -1124,7 +1085,7 @@ function calcAndUpdateCurrency(row, isUpdate = false) {
   if (isUpdate) {
     const id = row.id;
     const table = row.table_name ?? currentTableName.value;
-    updataRowHandle(table, id, "O", row.O);
+    updataRowHandle(row, table, id, "O", row.O);
   }
 
   calcAndUpdateTotalCasts(row, true);
@@ -1144,16 +1105,43 @@ function changeDataHandle(column, row) {
     if (id.startsWith("FAKE_")) {
       creatRowHandle(row, table, column, newData);
     } else {
-      updataRowHandle(table, id, column, newData);
-      nextTick(() => {
-        if (checkIsNeedCalc(column)) {
-          calcAndUpdateTotalCasts(row, true);
-          calcAndUpdateSalesProfit(row, true);
-        }
-        if (column == "N") {
-          calcAndUpdateCurrency(row, true);
-        }
-      });
+      updataRowHandle(row, table, id, column, newData);
+    }
+  } else {
+    console.log("没有变", column, id, newData);
+  }
+
+  currentEdit.column = -1;
+  currentEdit.row = -1;
+}
+
+function changeNumberHandle(column, row) {
+  tableData.EDIT = "";
+  let newData = row[column];
+  if (column != "L") {
+    newData = parseFloat(newData);
+    if (isNaN(newData)) {
+      newData = 0.0;
+    }
+  } else {
+    newData = parseInt(newData);
+    if (isNaN(newData)) {
+      newData = 1;
+    }
+  }
+
+  row[column] = newData;
+
+  let id = row.id;
+  let table = row.table_name ?? currentTableName.value;
+  console.log("changeDataHandle", oldCellData, newData);
+  if (oldCellData != newData) {
+    // 更新后台数据
+    console.log("更新", column, id, newData);
+    if (id.startsWith("FAKE_")) {
+      creatRowHandle(row, table, column, newData);
+    } else {
+      updataRowHandle(row, table, id, column, newData);
     }
   } else {
     console.log("没有变", column, id, newData);
@@ -1312,6 +1300,16 @@ function confirmDelHandle(rowdata: any) {
   background: var(--c-255-255-255-100);
 }
 
+.extable_mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 130px);
+  height: 7.875rem;
+  background: transparent;
+  z-index: 999999;
+}
+
 .extable_cell {
   width: 100%;
   height: 100%;
@@ -1345,5 +1343,32 @@ function confirmDelHandle(rowdata: any) {
 
 :deep(.el-table th.el-table__cell) {
   background: var(--c-247-248-250-100);
+}
+
+:deep(.el-input .extable_input) {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+.extable_input :deep(.el-input__wrapper) {
+  background-color: transparent;
+  box-shadow: 0 0 0 0;
+}
+
+.extable_input :deep(.el-input__inner) {
+  border: none;
+  outline: none;
+  box-shadow: 0 0 0 0px;
+}
+
+.extable_cell :deep(.el-select__wrapper) {
+  background-color: transparent;
+  box-shadow: 0 0 0 0;
+}
+
+.extable_cell :deep(.el-input__wrapper) {
+  background-color: transparent;
+  box-shadow: 0 0 0 0;
 }
 </style>
